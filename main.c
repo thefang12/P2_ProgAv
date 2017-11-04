@@ -151,7 +151,10 @@ int main(void) {
         XLookupString(&keyEv, string, 200, &keysym, NULL);
         printf("Se  detecto Keypress con Keycode  = %i\n",      keyEv.keycode);
         printf("Se  detecto Keypress con estado  = %li\n",      keyEv.state); //
-        printf("Se  detecto Keypress con valor legible = %s\n", string);
+        if(string[0]>31)
+          printf("Se  detecto Keypress con valor legible = %c\n", string[0]);
+        else
+          printf("Se  detecto Keypress con valor no legible\n");
 
         if (keyEv.keycode == 0x09) break;
       }
@@ -159,41 +162,50 @@ int main(void) {
     ////liberado
     if ((ev.type == EV_KEY) && (ev.value == 0)) {
       switch (ev.code) {
+        case KEY_LEFTSHIFT:
+          ac -= ShiftMask;
+          break;
 
-      case KEY_LEFTSHIFT:
-        ac -= ShiftMask;
-        break;
+        case KEY_RIGHTSHIFT:
+          ac -= ShiftMask;
+          break;
 
-      case KEY_RIGHTSHIFT:
-        ac -= ShiftMask;
-        break;
+        case KEY_RIGHTALT:
+          ac -= Mod1Mask;
+          break;
 
-      case KEY_RIGHTALT:
-        ac -= Mod1Mask;
-        break;
+        case KEY_LEFTALT:
+          ac -= Mod1Mask;
+          break;
 
-      case KEY_LEFTALT:
-        ac -= Mod1Mask;
-        break;
+        case  KEY_LEFTCTRL:
+          ac -= ControlMask;
+          break;
 
-      case  KEY_LEFTCTRL:
-        ac -= ControlMask;
-        break;
+        case KEY_RIGHTCTRL:
+          ac -= ControlMask;
+          break;
 
-      case KEY_RIGHTCTRL:
-        ac -= ControlMask;
-        break;
-      default:
-        printf("CODE = %d \t EVENT = %d\n", ev.code, (int)ev.value);
-        char   string[200];
-        KeySym keysym;
-        XKeyEvent keyEv = createKeyEvent(display, winFocus, winRoot, False, ev.code + 8, ac|caps|numlock);
-        XLookupString(&keyEv, string, 200, &keysym, NULL);
-        printf("Se  detecto Keypress con Keycode  = %i\n",      keyEv.keycode);
-        printf("Se  detecto Keypress con estado  = %li\n",      keyEv.state); //
-        printf("Se  detecto Keypress con valor legible = %s\n", string);
+        case KEY_NUMLOCK:
+          break;
 
-        if (keyEv.keycode == 0x09) break;
+        case KEY_CAPSLOCK:
+          break;
+          
+        default:
+          printf("CODE = %d \t EVENT = %d\n", ev.code, (int)ev.value);
+          char   string[200];
+          KeySym keysym;
+          XKeyEvent keyEv = createKeyEvent(display, winFocus, winRoot, False, ev.code + 8, ac|caps|numlock);
+          XLookupString(&keyEv, string, 200, &keysym, NULL);
+
+          printf("Se  detecto Keypress con Keycode  = %i\n",      keyEv.keycode);
+          printf("Se  detecto Keypress con estado  = %li\n",      keyEv.state);
+          if(string[0]>31)
+            printf("Se  detecto Keypress con valor legible = %c\n", string[0]);
+          else
+            printf("Se  detecto Keypress con valor no legible\n");
+          if (keyEv.keycode == 0x09) break;
       }
     }
   }
