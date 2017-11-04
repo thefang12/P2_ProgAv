@@ -191,7 +191,7 @@ int main(void) {
 
         case KEY_CAPSLOCK:
           break;
-          
+
         default:
           printf("CODE = %d \t EVENT = %d\n", ev.code, (int)ev.value);
           char   string[200];
